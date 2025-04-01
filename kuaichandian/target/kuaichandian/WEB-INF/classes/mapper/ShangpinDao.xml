@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.ShangpinDao">
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.hx_types as hxTypes
+        ,a.money as money
+        ,a.img_photo as imgPhoto
+        ,a.shangpin_content as shangpin_content
+    </sql>
+
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.ShangpinView" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM Shangpin  a
+        <where>
+            <if test=" params.hxTypes != '' and params.hxTypes != null and params.hxTypes != 'null' ">
+                and a.hx_types = #{params.hxTypes}
+            </if>
+            <if test=" params.moneyStartSearch != '' and params.moneyStartSearch != null and params.moneyStartSearch != 'null' ">
+                and a.money &gt;= #{params.moneyStartSearch}
+            </if>
+            <if test=" params.moneyEndSearch != '' and params.moneyEndSearch != null and params.moneyEndSearch != 'null' ">
+                and a.money &lt;= #{params.moneyEndSearch}
+            </if>
+            <if test=" params.shangpinContent != '' and params.shangpinContent != null and params.shangpinContent != 'null' ">
+                and a.shangpin_content like CONCAT('%',#{params.shangpinContent},'%')
+            </if>
+        </where>
+        order by a.id desc
+    </select>
+
+</mapper>
